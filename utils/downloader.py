@@ -14,9 +14,9 @@ from telegram.error import TimedOut
 from telegram.ext import ApplicationBuilder
 
 loong_sticker_name_list = [
-    # 'https://t.me/addstickers/dragonpic',
-    # 'https://t.me/addstickers/p0_wmtz2103953167_by_wumingv2bot',
-    # "https://t.me/addstickers/longtuc",
+    'https://t.me/addstickers/dragonpic',
+    'https://t.me/addstickers/p0_wmtz2103953167_by_wumingv2bot',
+    "https://t.me/addstickers/longtuc",
     "https://t.me/addstickers/skdjj6680_by_fstikbot",
     "https://t.me/addstickers/longtucs",
     "https://t.me/addstickers/kirinlongtu_by_favorite_stickers_bot"
@@ -39,6 +39,7 @@ async def download_sticker(sticker):
 
         if sticker.is_animated:
             pass
+            return
         if sticker.is_video:
             process = (
                 ffmpeg.input('pipe:0')
@@ -50,7 +51,7 @@ async def download_sticker(sticker):
             # count frames
             frames = len(list(temp_path.glob("*.png")))
 
-            for i in range(frames):
+            for i in range(1, frames + 1):
                 # compute hash
                 img = Image.open(temp_path / f"temp_{i}.png").convert('RGBA')
                 hash_ = imagehash.phash(img)
@@ -60,7 +61,8 @@ async def download_sticker(sticker):
             # clean temp files
             for f in temp_path.glob("*.png"):
                 f.unlink()
-
+            return
+        
         img = Image.open(byte).convert('RGBA')
         hash_ = imagehash.phash(img)
         img.save(
@@ -68,10 +70,10 @@ async def download_sticker(sticker):
     except TimedOut as e:
         time.sleep(1)
         return await download_sticker(sticker)
-    except Exception as e:
-        tqdm.tqdm.write(f"Error: {e}")
-        time.sleep(1)
-        return await download_sticker(sticker)
+    # except Exception as e:
+    #     tqdm.tqdm.write(f"Error: {e}")
+    #     time.sleep(1)
+    #     return await download_sticker(sticker)
 
 
 async def download_sticker_set(sticker_set_name: str) -> list:
