@@ -1,0 +1,13 @@
+ffmpeg_python
+httpx
+ImageHash
+Pillow
+selenium
+tqdm
+torch
+torchvision
+jupyter
+ipywidgets
+matplotlib
+numpy
+scikit-learn
