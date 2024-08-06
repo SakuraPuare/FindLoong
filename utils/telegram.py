@@ -1,5 +1,6 @@
 import asyncio
 import io
+import os
 import pathlib
 import re
 import time
@@ -62,7 +63,7 @@ async def download_sticker(sticker):
             for f in temp_path.glob("*.png"):
                 f.unlink()
             return
-        
+
         img = Image.open(byte).convert('RGBA')
         hash_ = imagehash.phash(img)
         img.save(
@@ -100,9 +101,7 @@ def get_bot():
 
 idx = -1
 
-token_list = [
-
-]
+token_list = [i for i in os.environ.get("TELEGRAM_TOKEN_LIST").split(',') if i]
 bot_list = [Bot(token) for token in token_list]
 
 limit = asyncio.Semaphore(32)
