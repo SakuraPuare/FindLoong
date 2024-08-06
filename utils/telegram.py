@@ -23,10 +23,10 @@ loong_sticker_name_list = [
 ]
 
 
-download_path = pathlib.Path('../data/loong')
+download_path = pathlib.Path(__file__).parent / '../data/loong'
 download_path.mkdir(parents=True, exist_ok=True)
 
-temp_path = download_path / "temp"
+temp_path = download_path.parent / "temp"
 temp_path.mkdir(parents=True, exist_ok=True)
 
 
@@ -111,3 +111,6 @@ ApplicationBuilder().connection_pool_size(512)
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+
+temp_path.rmdir()

@@ -162,6 +162,7 @@ cython_debug/
 .idea/
 
 data/
+exp
 
 .vscode
 
