@@ -18,7 +18,7 @@ STOKEN_LIST = os.environ.get("STOKEN_LIST")
 
 client_list = []
 
-target = "熊猫头"
+target = "龙玉涛"
 
 idx = -1
 
@@ -64,26 +64,26 @@ async def get_threads(name: str):
     page_size = 100
 
     # 对于贴吧里帖子列表的每一页
-    for thread_page in tqdm.trange(status.get('current_page', 1), threads_count // page_size + 1, desc='Page'):
+    for thread_page in tqdm.trange(status.get('current_page', 1), threads_count // page_size + 1, desc='Page', position=0):
         thread = await get_client().get_threads(name, rn=page_size, pn=thread_page)
 
         # 对于每个帖子
-        for idx, thread in tqdm.tqdm(enumerate(thread.objs), total=page_size, desc='Thread'):
+        for idx, thread in tqdm.tqdm(enumerate(thread.objs), total=page_size, desc='Thread', position=1):
             if idx + 1 < status.get('current_thread_idx', 1):
                 continue
 
             resp = await get_client().get_posts(thread.tid)
             post_count = resp.page.total_page * resp.page.page_size
 
+            for img in thread.contents.imgs:
+                await get_image(img.origin_src)
+
             # 对于每个帖子里的每一页
-            for post_page in tqdm.trange(1, post_count // page_size + 1, desc='Post'):
+            for post_page in tqdm.trange(1, post_count // page_size + 1, desc='Post', position=2):
                 posts = await get_client().get_posts(thread.tid, pn=post_page, rn=page_size)
                 for post in posts.objs:
                     for img in post.contents.imgs:
                         await get_image(img.origin_src)
-            
-            for img in thread.contents.imgs:
-                await get_image(img.origin_src)
 
                 status['current_post_idx'] = post_page
             status['current_thread_idx'] = idx + 1
@@ -124,10 +124,10 @@ async def main():
 
 
 status = {'current_page_idx': 1,
-          'current_thread_idx': 1, 'current_post_idx': 1}
+          'current_thread_idx': 18, 'current_post_idx': 10}
 
 limit = asyncio.Semaphore(5)
-download_path = pathlib.Path(__file__).parent / "../download/xiongmao"
+download_path = pathlib.Path(__file__).parent / "../download/tieba"
 download_path.mkdir(exist_ok=True)
 
 
