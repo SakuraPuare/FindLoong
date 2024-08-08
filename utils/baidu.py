@@ -18,7 +18,7 @@ STOKEN_LIST = os.environ.get("STOKEN_LIST")
 
 client_list = []
 
-target = "龙玉涛"
+target = "熊猫头"
 
 idx = -1
 
@@ -81,6 +81,9 @@ async def get_threads(name: str):
                 for post in posts.objs:
                     for img in post.contents.imgs:
                         await get_image(img.origin_src)
+            
+            for img in thread.contents.imgs:
+                await get_image(img.origin_src)
 
                 status['current_post_idx'] = post_page
             status['current_thread_idx'] = idx + 1
@@ -120,14 +123,11 @@ async def main():
         print(status)
 
 
-status = {
-    'current_page_idx': 1,
-    'current_thread_idx': 2,
-    'current_post_idx': 1
-}
+status = {'current_page_idx': 1,
+          'current_thread_idx': 1, 'current_post_idx': 1}
 
 limit = asyncio.Semaphore(5)
-download_path = pathlib.Path(__file__).parent / "../download"
+download_path = pathlib.Path(__file__).parent / "../download/xiongmao"
 download_path.mkdir(exist_ok=True)
 
 
